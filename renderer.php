@@ -823,8 +823,8 @@ class mod_studentquiz_overview_renderer extends mod_studentquiz_renderer {
     }
 
     /**
-     * @param $view
-     * @return mixed
+     * @param mod_studentquiz_view $view
+     * @return string
      * TODO: REFACTOR!
      */
     public function render_questionbank($view) {
@@ -834,11 +834,12 @@ class mod_studentquiz_overview_renderer extends mod_studentquiz_renderer {
     }
 
     /**
-     * @param $view
+     * @param mod_studentquiz_view $view
      * @return string
      */
     public function render_select_qtype_form($view) {
-        return $view->get_questionbank()->create_new_question_form($view->get_category_id(), true);
+        return $view->get_questionbank()->create_new_question_form($view->get_category_id(),
+                has_capability('moodle/question:add', $view->get_context()));
     }
 
     /**
