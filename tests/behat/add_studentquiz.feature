@@ -1,22 +1,22 @@
 @mod @mod_studentquiz
-Feature: Activities can be created
-  In order to use this plugin
+Feature: Student Quiz activity creation
+  To allow my students to set questions for each other
   As a teacher
-  I need the creation of an activity to work
+  I need to add a Student Quiz activity to my course
 
-  Scenario: Check an Activity can be created
+  Scenario: Teacher can add a Student Quiz to a course
     Given the following "users" exist:
       | username | firstname | lastname | email                |
-      | teacher1 | Terry1    | Teacher1 | teacher1@example.com |
-      | student1 | Sam1      | Student1 | student1@example.com |
+      | teacher  | Terry     | Teacher  | teacher1@example.com |
+      | student  | Sam       | Student  | student1@example.com |
     And the following "courses" exist:
       | fullname | shortname | category |
       | Course 1 | C1        | 0        |
     And the following "course enrolments" exist:
-      | user     | course | role           |
-      | teacher1 | C1     | editingteacher |
-      | student1 | C1     | student        |
-    When I log in as "teacher1"
+      | user    | course | role           |
+      | teacher | C1     | editingteacher |
+      | student | C1     | student        |
+    When I log in as "teacher"
     And I am on "Course 1" course homepage with editing mode on
     And I add a "StudentQuiz" to section "1" and I fill the form with:
       | StudentQuiz Name | Test quiz name        |
@@ -24,3 +24,18 @@ Feature: Activities can be created
     And I am on "Course 1" course homepage
     And I follow "Test quiz name"
     Then I should see "Create new question"
+
+    # Check that the permission set up has worked, so a student can create a question here.
+    And I log out
+    And I log in as "student"
+    And I am on "Course 1" course homepage
+    And I follow "Test quiz name"
+    And I press "Create new question"
+    And I set the field "True/False" to "1"
+    And I press "Add"
+    And I set the following fields to these values:
+      | Question name  | Is Student Quiz amazing  |
+      | Question text  | Is Student Quiz amazing? |
+      | Correct answer | True                     |
+    And I press "id_submitbutton"
+    And I should see "Sam Student" in the "Is Student Quiz amazing" "table_row"
